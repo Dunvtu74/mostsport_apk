@@ -1,7 +1,7 @@
 {
   "app": "mostsport-gate",
-  "version": 2,
-  "updated_at": 1793873750,
+  "version": 3,
+  "updated_at": 1793883271,
   "ttl_hours": 6,
   "direct_url": "https://zavbet.online/",
   "sub_url": "https://alius-sub.com/sub/ohDGE67bZuatW8sZ",
@@ -14,22 +14,19 @@
     "🇪🇪",
     "🇷🇺",
     "Варшава",
-    "Вильнюс",
     "Москва"
   ],
   "ban": [
     "🇳🇱",
     "🇺🇸",
     "🇦🇹",
-    "🇩🇪",
     "🇸🇪",
     "Амстердам",
     "Нью-Йорк",
     "Вена",
-    "Франкфурт",
     "Gaming",
     "Китая"
   ],
-  "connect_timeout_sec": 10,
-  "max_ranked": 3
+  "connect_timeout_sec": 5,
+  "max_ranked": 8
 }

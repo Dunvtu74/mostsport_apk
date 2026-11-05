@@ -227,7 +227,7 @@ $('b-save').onclick = async ()=>{
     loadedVersion = cfg.version;
     $('meta').textContent = 'Сохранено: v'+cfg.version+' · commit '+(res.commit.sha||'').slice(0,7);
     log('Сохранено на GitHub: v'+cfg.version+', commit '+(res.commit.sha||'').slice(0,7),'ok');
-    log('Зеркала обновятся: raw.github ~мгновенно, jsDelivr до 12 ч — не страшно, raw основной.','dim');
+    log('raw.github обновляется сразу; jsDelivr может держать старую копию до 12 ч — приложение берёт максимальную версию из зеркал.','dim');
   }catch(e){ log('Ошибка сохранения: '+e.message,'err'); }
 };
 
@@ -300,7 +300,11 @@ $('b-history').onclick = async ()=>{
         try{
           const data = await api(repoBase()+'?ref='+c.sha);
           const cfg = JSON.parse(b64d(data.content));
-          loadedVersion = 0; fillForm(cfg);
+          // version must jump past HEAD so stale CDN mirrors can't outvote the rollback
+          loadedVersion = 0;
+          const head = await api(repoBase()+'?ref='+encodeURIComponent($('r-branch').value.trim())).catch(()=>null);
+          if (head) { try { loadedVersion = JSON.parse(b64d(head.content)).version || 0; } catch(e){} }
+          fillForm(cfg);
           $('f-nobump').checked = false;
           log('Коммит '+c.sha.slice(0,7)+' загружен в форму — проверь и нажми «Сохранить на GitHub»','ok');
           window.scrollTo({top:0,behavior:'smooth'});

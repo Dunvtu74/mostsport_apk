@@ -3,320 +3,458 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mostsport · Админ-панель</title>
+<title>Mostsport · конфиг</title>
 <style>
 :root{
-  --bg:#0d1117;--panel:#161b22;--line:#2d333b;--text:#e6edf3;--dim:#8b949e;
-  --accent:#2f81f7;--ok:#3fb950;--warn:#d29922;--err:#f85149;--mono:ui-monospace,Consolas,monospace;
+  --bg:#0e1116; --card:#171c24; --line:#2a3140; --text:#e8edf5; --dim:#8b95a7;
+  --accent:#3d7eff; --ok:#3fb950; --warn:#d29922; --err:#f85149;
+  --mono:ui-monospace,Consolas,monospace;
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 system-ui,Segoe UI,sans-serif;padding:24px}
-.wrap{max-width:980px;margin:0 auto}
-h1{font-size:22px;margin:0 0 4px}
-h1 span{color:var(--dim);font-weight:400;font-size:14px}
-h2{font-size:15px;margin:0 0 12px;color:var(--accent);text-transform:uppercase;letter-spacing:.06em}
-section{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px;margin:16px 0}
-.row{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0}
-.row label{flex:1 1 150px;font-size:13px;color:var(--dim)}
-.row input,.row textarea{flex:2 1 300px;background:#0d1117;color:var(--text);border:1px solid var(--line);border-radius:6px;padding:7px 10px;font:13px var(--mono)}
-textarea{width:100%;min-height:84px}
-input:focus,textarea:focus{outline:1px solid var(--accent)}
-button{background:var(--accent);border:none;color:#fff;border-radius:6px;padding:8px 16px;font-size:14px;cursor:pointer;margin:4px 6px 4px 0}
-button.ghost{background:transparent;border:1px solid var(--line);color:var(--text)}
-button.danger{background:transparent;border:1px solid var(--err);color:var(--err)}
-button:disabled{opacity:.45;cursor:default}
-.hint{font-size:12px;color:var(--dim);margin:2px 0 10px}
-#log{font:12px var(--mono);background:#0d1117;border:1px solid var(--line);border-radius:6px;padding:10px;max-height:220px;overflow:auto;white-space:pre-wrap}
-.ok{color:var(--ok)}.err{color:var(--err)}.warn{color:var(--warn)}.dim{color:var(--dim)}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.45 system-ui,Segoe UI,sans-serif}
+button,input,textarea{font:inherit}
+button{cursor:pointer}
+.login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+.card{width:min(420px,100%);background:var(--card);border:1px solid var(--line);border-radius:16px;padding:28px}
+.card h1{margin:0 0 6px;font-size:22px}
+.card p{margin:0 0 18px;color:var(--dim);font-size:14px}
+.card input{width:100%;background:#0e1116;color:var(--text);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+.card button{width:100%;margin-top:12px;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:12px}
+.bad{color:var(--err);font-size:13px;min-height:18px;margin-top:8px}
+.top{position:sticky;top:0;z-index:2;background:rgba(14,17,22,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:14px 20px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.top h1{font-size:18px;margin:0;flex:1}
+.top .ver{color:var(--dim);font-size:13px}
+.wrap{max-width:920px;margin:0 auto;padding:8px 20px 48px}
+section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin:14px 0}
+h2{margin:0 0 4px;font-size:16px}
+.hint{color:var(--dim);font-size:13px;margin:0 0 12px}
+.key{display:flex;gap:10px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:8px 0;background:#10151c}
+.key .n{width:28px;height:28px;border-radius:8px;background:#243044;display:flex;align-items:center;justify-content:center;font-size:13px;flex:none}
+.key .info{flex:1;min-width:0}
+.key .name{font-weight:600}
+.key .host{color:var(--dim);font:12px var(--mono);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.key .ops{display:flex;gap:4px;flex:none}
+.key .ops button, .mini{background:transparent;border:1px solid var(--line);color:var(--text);border-radius:6px;padding:4px 8px}
+.add{display:flex;gap:8px}
+.add input{flex:1;background:#0e1116;color:var(--text);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font:13px var(--mono)}
+.primary{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:10px 16px}
+.ghost{background:transparent;border:1px solid var(--line);color:var(--text);border-radius:8px;padding:8px 14px}
+.danger{background:transparent;border:1px solid var(--err);color:var(--err);border-radius:8px;padding:8px 14px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:720px){.grid{grid-template-columns:1fr}}
+label.f{display:block;font-size:13px;color:var(--dim);margin:8px 0}
+label.f input,label.f textarea{display:block;width:100%;margin-top:4px;background:#0e1116;color:var(--text);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font:13px var(--mono)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.chip{border:1px solid var(--line);background:#10151c;color:var(--text);border-radius:999px;padding:4px 10px;font-size:13px}
+.chip.on{border-color:var(--ok);color:var(--ok)}
+.chip.off{border-color:var(--err);color:var(--err)}
+#log{font:12px var(--mono);background:#0e1116;border:1px solid var(--line);border-radius:8px;padding:10px;max-height:180px;overflow:auto;white-space:pre-wrap}
+.ok{color:var(--ok)}.err{color:var(--err)}.dim{color:var(--dim)}
 table{width:100%;border-collapse:collapse;font-size:13px}
-td,th{padding:5px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
-.chip{display:inline-block;background:#21262d;border-radius:10px;padding:1px 9px;margin:1px 2px;font-size:12px}
-.chip.good{color:var(--ok)}.chip.bad{color:var(--err)}.chip.skip{color:var(--dim)}
-#preview{min-height:200px}
-.meta{font-size:12px;color:var(--dim)}
+td,th{padding:6px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+details{margin-top:8px}
+summary{cursor:pointer;color:var(--dim)}
+#subout{margin-top:8px}
+.banner{background:#142033;border:1px solid #2a4068;border-radius:10px;padding:10px 12px;font-size:13px;color:#c5d4ee}
 </style>
 </head>
 <body>
-<div class="wrap">
-<h1>Mostsport · админ-панель <span>конфигурация туннеля приложения</span></h1>
-<div class="meta" id="meta">Не подключено</div>
+<div class="login" id="login">
+  <form class="card" id="login-form">
+    <h1>Mostsport</h1>
+    <p>Панель ключей и серверов. Пароль только открывает этот экран.</p>
+    <input id="pw" type="password" placeholder="Пароль" autocomplete="current-password">
+    <button type="submit">Войти</button>
+    <div class="bad" id="pw-err"></div>
+  </form>
+</div>
 
-<section>
-<h2>Репозиторий</h2>
-<div class="row"><label>Владелец</label><input id="r-owner" placeholder="Dunvtu74"></div>
-<div class="row"><label>Репозиторий</label><input id="r-repo" placeholder="mostsport_apk"></div>
-<div class="row"><label>Ветка</label><input id="r-branch" placeholder="main"></div>
-<div class="row"><label>Файл конфига</label><input id="r-path" placeholder="gate-config.json"></div>
-<div class="row"><label>Токен GitHub</label><input id="r-token" type="password" placeholder="github_pat_... (fine-grained: Contents read/write)"></div>
-<div class="row"><label>Запомнить токен</label><input id="r-remember" type="checkbox" style="flex:0"></div>
-<div class="hint">Токен нужен с правом Contents: Read and write на этот репозиторий. Создать: Settings → Developer settings → Fine-grained tokens. Панель работает из файла или с GitHub Pages — токен никуда, кроме api.github.com, не уходит.</div>
-<button id="b-load">Загрузить конфиг</button>
-<button id="b-new" class="ghost">Создать с нуля</button>
-</section>
+<div id="app" hidden>
+  <div class="top">
+    <h1>Mostsport <span class="ver" id="meta">конфиг не загружен</span></h1>
+    <button class="ghost" id="b-load" type="button">Обновить с GitHub</button>
+    <button class="primary" id="b-save" type="button">Опубликовать</button>
+    <button class="ghost" id="b-out" type="button">Выйти</button>
+  </div>
+  <div class="wrap">
+    <div class="banner">Ключи, подписка и фильтр стран доходят до телефонов без нового APK. Код самого приложения — только новой сборкой.</div>
 
-<section>
-<h2>Конфигурация</h2>
-<div class="row"><label>version</label><input id="f-version" type="number" value="1"></div>
-<div class="row"><label>ttl_hours (часы свежести кэша)</label><input id="f-ttl" type="number" value="6"></div>
-<div class="row"><label>direct_url (проверка прямого доступа)</label><input id="f-direct" value="https://zavbet.online/"></div>
-<div class="row"><label>sub_url (подписка v2rayNG)</label><input id="f-sub" value="https://alius-sub.com/sub/ohDGE67bZuatW8sZ"></div>
-<div class="row"><label>connect_timeout_sec</label><input id="f-timeout" type="number" value="10"></div>
-<div class="row"><label>max_ranked (запасных серверов после приоритетных)</label><input id="f-maxranked" type="number" value="3"></div>
-<div class="row" style="align-items:flex-start"><label>Приоритетные ключи (vless://, по одному в строке, сверху — самый первый)</label><textarea id="f-priority" spellcheck="false"></textarea></div>
-<div class="row" style="align-items:flex-start"><label>allow (разрешённые страны, подстроки)</label><textarea id="f-allow" spellcheck="false"></textarea></div>
-<div class="row" style="align-items:flex-start"><label>ban (запрещённые, проверяются первыми)</label><textarea id="f-ban" spellcheck="false"></textarea></div>
-<div class="hint">Приложение пробует приоритетные ключи в этом порядке, потом серверы из подписки, прошедшие фильтр allow/ban, а если ничего не поднялось — открывает сайт напрямую без VPN.</div>
-<button id="b-checksub">Проверить подписку</button>
-<button id="b-build" class="ghost">Собрать JSON</button>
-<button id="b-save">Сохранить на GitHub</button>
-<label style="font-size:13px;color:var(--dim);margin-left:10px"><input type="checkbox" id="f-nobump"> не увеличивать version</label>
-<div id="subout"></div>
-</section>
+    <section>
+      <h2>Ключи, которые пробуются первыми</h2>
+      <p class="hint">Верхний ключ — первый. Туркменский оставляй сверху. Если он молчит, приложение сразу берёт следующий живой.</p>
+      <div id="keys"></div>
+      <div class="add">
+        <input id="key-new" placeholder="vless://... вставь сюда и добавь" spellcheck="false">
+        <button class="primary" id="b-add" type="button">Добавить</button>
+      </div>
+    </section>
 
-<section>
-<h2>Предпросмотр JSON</h2>
-<textarea id="preview" spellcheck="false" readonly></textarea>
-<div class="row"><button id="b-copy" class="ghost">Скопировать</button><button id="b-dl" class="ghost">Скачать gate-config.json</button></div>
-</section>
+    <section>
+      <h2>Куда подключаться</h2>
+      <div class="grid">
+        <label class="f">Сайт приложения
+          <input id="f-direct" value="https://zavbet.online/">
+        </label>
+        <label class="f">Ссылка подписки
+          <input id="f-sub" value="https://alius-sub.com/sub/ohDGE67bZuatW8sZ">
+        </label>
+        <label class="f">Сколько серверов из подписки пробовать после ключей (1–8)
+          <input id="f-maxranked" type="number" min="1" max="8" value="4">
+        </label>
+        <label class="f">Секунд на один сервер (4–8)
+          <input id="f-timeout" type="number" min="4" max="8" value="6">
+        </label>
+      </div>
+      <button class="ghost" id="b-checksub" type="button">Показать, какие серверы подписки пройдут</button>
+      <div id="subout"></div>
+    </section>
 
-<section>
-<h2>История изменений</h2>
-<button id="b-history" class="ghost">Обновить список</button>
-<div id="history"></div>
-</section>
+    <section>
+      <h2>Страны</h2>
+      <p class="hint">Зелёные берутся из подписки. Красные выкидываются. Можно дописать свою строку и нажать Enter.</p>
+      <div class="grid">
+        <div>
+          <div>Разрешены</div>
+          <div class="chips" id="allow"></div>
+          <input id="allow-new" placeholder="добавить, например Варшава" style="margin-top:8px;width:100%;background:#0e1116;color:var(--text);border:1px solid var(--line);border-radius:8px;padding:8px 10px">
+        </div>
+        <div>
+          <div>Запрещены</div>
+          <div class="chips" id="ban"></div>
+          <input id="ban-new" placeholder="добавить, например Франкфурт" style="margin-top:8px;width:100%;background:#0e1116;color:var(--text);border:1px solid var(--line);border-radius:8px;padding:8px 10px">
+        </div>
+      </div>
+    </section>
 
-<section>
-<h2>Журнал</h2>
-<div id="log"></div>
-</section>
+    <section>
+      <h2>История</h2>
+      <p class="hint">Откат подставляет старый конфиг в форму. На телефоны он попадёт после «Опубликовать».</p>
+      <button class="ghost" id="b-history" type="button">Показать коммиты</button>
+      <div id="history"></div>
+    </section>
+
+    <section>
+      <h2>GitHub</h2>
+      <p class="hint">Токен с правом Contents: Read and write только на этот репозиторий. Пароль экрана его не заменяет.</p>
+      <div class="grid">
+        <label class="f">Владелец<input id="r-owner" value="Dunvtu74"></label>
+        <label class="f">Репозиторий<input id="r-repo" value="mostsport_apk"></label>
+        <label class="f">Ветка<input id="r-branch" value="main"></label>
+        <label class="f">Файл<input id="r-path" value="gate-config.json"></label>
+      </div>
+      <label class="f">Токен
+        <input id="r-token" type="password" placeholder="github_pat_...">
+      </label>
+      <label class="hint"><input type="checkbox" id="r-remember"> запомнить токен в этом браузере</label>
+      <label class="hint"><input type="checkbox" id="f-nobump"> не поднимать номер версии</label>
+      <details>
+        <summary>Собранный JSON</summary>
+        <textarea id="preview" readonly style="width:100%;min-height:180px;margin-top:8px;background:#0e1116;color:var(--text);border:1px solid var(--line);border-radius:8px;padding:10px;font:12px var(--mono)"></textarea>
+        <button class="ghost" id="b-copy" type="button">Скопировать</button>
+      </details>
+    </section>
+
+    <section>
+      <h2>Журнал</h2>
+      <div id="log"></div>
+    </section>
+  </div>
 </div>
 
 <script>
 'use strict';
+const PASS = 'mostsport';
 const $ = id => document.getElementById(id);
 const TM_KEY = 'vless://ebce8d8b-023f-4914-b6f2-f2206ad41c0d@216.250.8.116:8080?type=ws&headerType=none&security=tls&fp=chrome&sni=yakyn.biz&path=/tm-ee23c14483b6930f&host=yakyn.biz&alpn=http/1.1#%F0%9F%87%B9%F0%9F%87%B2%20%D0%94%D0%BB%D1%8F%20%D0%A2%D1%83%D1%80%D0%BA%D0%BC%D0%B5%D0%BD%D0%B8%D1%81%D1%82%D0%B0%D0%BD%D0%B0';
-const LS = 'mostsport_admin_v1';
+const ALLOW0 = ['🇵🇱','🇱🇹','🇪🇪','🇷🇺','Варшава','Вильнюс','Москва'];
+const BAN0 = ['🇳🇱','🇺🇸','🇦🇹','🇩🇪','🇸🇪','Амстердам','Нью-Йорк','Вена','Франкфурт','Gaming','Китая'];
+const LS = 'mostsport_admin_v2';
+let keys = [];
+let allow = ALLOW0.slice();
+let ban = BAN0.slice();
 let fileSha = null, loadedVersion = 0, historyData = [];
 
-function log(msg, cls){ const d=document.createElement('div'); d.className=cls||''; d.textContent='['+new Date().toLocaleTimeString()+'] '+msg; $('log').prepend(d); }
-const b64e = s => btoa(String.fromCharCode(...new TextEncoder().encode(s)));
-const b64d = b => new TextDecoder().decode(Uint8Array.from(atob(b.replace(/\s+/g,'')), c => c.charCodeAt(0)));
+function log(msg, cls){
+  const d = document.createElement('div');
+  d.className = cls || '';
+  d.textContent = '[' + new Date().toLocaleTimeString() + '] ' + msg;
+  $('log').prepend(d);
+}
+function b64e(s){
+  const bytes = new TextEncoder().encode(s);
+  let bin = '';
+  for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+  return btoa(bin);
+}
+function b64d(b){
+  const bin = atob(b.replace(/\s+/g, ''));
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return new TextDecoder().decode(bytes);
+}
+function esc(s){ const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+function keyName(uri){
+  const hash = uri.indexOf('#');
+  if (hash >= 0) { try { return decodeURIComponent(uri.slice(hash + 1)); } catch (e) { return uri.slice(hash + 1); } }
+  const m = uri.match(/@([^:?]+):(\d+)/);
+  return m ? m[1] + ':' + m[2] : uri.slice(0, 42);
+}
+function keyHost(uri){
+  const m = uri.match(/@([^:?]+):(\d+)/);
+  return m ? m[1] + ':' + m[2] : '';
+}
+
+function renderKeys(){
+  const box = $('keys');
+  box.innerHTML = '';
+  if (!keys.length) box.innerHTML = '<div class="hint">Ключей нет. Приложение пойдёт сразу по подписке.</div>';
+  keys.forEach((uri, i) => {
+    const row = document.createElement('div');
+    row.className = 'key';
+    row.innerHTML = '<div class="n">' + (i + 1) + '</div><div class="info"><div class="name">' + esc(keyName(uri)) +
+      '</div><div class="host">' + esc(keyHost(uri)) + '</div></div><div class="ops"></div>';
+    const ops = row.querySelector('.ops');
+    const up = document.createElement('button'); up.className = 'mini'; up.textContent = '↑'; up.disabled = i === 0;
+    const down = document.createElement('button'); down.className = 'mini'; down.textContent = '↓'; down.disabled = i === keys.length - 1;
+    const del = document.createElement('button'); del.className = 'mini'; del.textContent = 'убрать';
+    up.onclick = () => { const t = keys[i - 1]; keys[i - 1] = keys[i]; keys[i] = t; renderKeys(); };
+    down.onclick = () => { const t = keys[i + 1]; keys[i + 1] = keys[i]; keys[i] = t; renderKeys(); };
+    del.onclick = () => { keys.splice(i, 1); renderKeys(); };
+    ops.append(up, down, del);
+    box.append(row);
+  });
+}
+function renderChips(id, list, on){
+  const box = $(id);
+  box.innerHTML = '';
+  list.forEach((item, i) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'chip ' + (on ? 'on' : 'off');
+    b.textContent = item + ' ×';
+    b.onclick = () => { list.splice(i, 1); renderChips(id, list, on); };
+    box.append(b);
+  });
+}
+function bindAdd(inputId, list, boxId, on){
+  $(inputId).addEventListener('keydown', e => {
+    if (e.key !== 'Enter') return;
+    e.preventDefault();
+    const v = $(inputId).value.trim();
+    if (!v || list.includes(v)) return;
+    list.push(v);
+    $(inputId).value = '';
+    renderChips(boxId, list, on);
+  });
+}
 
 function saveConn(){
   const st = {owner:$('r-owner').value.trim(), repo:$('r-repo').value.trim(), branch:$('r-branch').value.trim(), path:$('r-path').value.trim()};
-  if($('r-remember').checked) st.token = $('r-token').value;
+  if ($('r-remember').checked) st.token = $('r-token').value;
   localStorage.setItem(LS, JSON.stringify(st));
 }
 function loadConn(){
-  try{ const st = JSON.parse(localStorage.getItem(LS)||'{}');
-    if(st.owner)$('r-owner').value=st.owner; if(st.repo)$('r-repo').value=st.repo;
-    if(st.branch)$('r-branch').value=st.branch; if(st.path)$('r-path').value=st.path;
-    if(st.token){$('r-token').value=st.token;$('r-remember').checked=true;}
-  }catch(e){}
-  if(!$('r-owner').value)$('r-owner').value='Dunvtu74';
-  if(!$('r-repo').value)$('r-repo').value='mostsport_apk';
-  if(!$('r-branch').value)$('r-branch').value='main';
-  if(!$('r-path').value)$('r-path').value='gate-config.json';
+  try {
+    const st = JSON.parse(localStorage.getItem(LS) || '{}');
+    if (st.owner) $('r-owner').value = st.owner;
+    if (st.repo) $('r-repo').value = st.repo;
+    if (st.branch) $('r-branch').value = st.branch;
+    if (st.path) $('r-path').value = st.path;
+    if (st.token) { $('r-token').value = st.token; $('r-remember').checked = true; }
+  } catch (e) {}
 }
 function api(path, opts){
-  const headers = {'Authorization':'Bearer '+$('r-token').value.trim(),'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'};
-  if(opts && opts.body){ headers['Content-Type']='application/json'; opts.body = JSON.stringify(opts.body); }
-  opts = opts || {}; opts.headers = headers;
-  return fetch('https://api.github.com'+path, opts).then(async r => {
-    const data = r.status===204?null:await r.json().catch(()=>null);
-    if(!r.ok) throw new Error((data&&data.message)?('GitHub: '+data.message):('HTTP '+r.status));
+  const headers = {'Authorization':'Bearer ' + $('r-token').value.trim(), 'Accept':'application/vnd.github+json', 'X-GitHub-Api-Version':'2022-11-28'};
+  opts = opts || {};
+  if (opts.body) { headers['Content-Type'] = 'application/json'; opts.body = JSON.stringify(opts.body); }
+  opts.headers = headers;
+  return fetch('https://api.github.com' + path, opts).then(async r => {
+    const data = r.status === 204 ? null : await r.json().catch(() => null);
+    if (!r.ok) throw new Error((data && data.message) ? ('GitHub: ' + data.message) : ('HTTP ' + r.status));
     return data;
   });
 }
-function repoBase(){ return '/repos/'+$('r-owner').value.trim()+'/'+$('r-repo').value.trim()+'/contents/'+$('r-path').value.trim(); }
-
-/* ---------- form <-> json ---------- */
-function fillForm(cfg){
-  $('f-version').value = cfg.version||1;
-  $('f-ttl').value = cfg.ttl_hours||6;
-  $('f-direct').value = cfg.direct_url||'https://zavbet.online/';
-  $('f-sub').value = cfg.sub_url||'';
-  $('f-timeout').value = cfg.connect_timeout_sec||10;
-  $('f-maxranked').value = cfg.max_ranked||3;
-  $('f-priority').value = (cfg.priority||[]).join('\n');
-  $('f-allow').value = (cfg.allow||[]).join('\n');
-  $('f-ban').value = (cfg.ban||[]).join('\n');
+function repoBase(){
+  return '/repos/' + $('r-owner').value.trim() + '/' + $('r-repo').value.trim() + '/contents/' + $('r-path').value.trim();
+}
+function num(id, def, min, max){
+  const v = parseInt($(id).value, 10);
+  const n = isNaN(v) ? def : v;
+  return Math.min(max, Math.max(min, n));
 }
 function buildJson(){
-  const num = (id,def)=>{const v=parseInt($(id).value,10);return isNaN(v)?def:v;};
-  let version = num('f-version',1);
-  if(!$('f-nobump').checked && loadedVersion>0) version = Math.max(version, loadedVersion)+1;
-  $('f-version').value = version;
-  return {
-    app:'mostsport-gate', version,
-    updated_at: Math.floor(Date.now()/1000),
-    ttl_hours: Math.min(168,Math.max(1,num('f-ttl',6))),
+  let version = parseInt($('f-version') ? $('f-version').value : loadedVersion, 10);
+  if (isNaN(version)) version = loadedVersion || 1;
+  if (!$('f-nobump').checked && loadedVersion > 0) version = Math.max(version, loadedVersion) + 1;
+  const cfg = {
+    app: 'mostsport-gate',
+    version,
+    updated_at: Math.floor(Date.now() / 1000),
+    ttl_hours: 6,
     direct_url: $('f-direct').value.trim(),
     sub_url: $('f-sub').value.trim(),
-    priority: $('f-priority').value.split('\n').map(s=>s.trim()).filter(Boolean),
-    allow: $('f-allow').value.split('\n').map(s=>s.trim()).filter(Boolean),
-    ban: $('f-ban').value.split('\n').map(s=>s.trim()).filter(Boolean),
-    connect_timeout_sec: Math.min(30,Math.max(5,num('f-timeout',10))),
-    max_ranked: Math.min(6,Math.max(1,num('f-maxranked',3)))
+    priority: keys.slice(),
+    allow: allow.slice(),
+    ban: ban.slice(),
+    connect_timeout_sec: num('f-timeout', 6, 4, 8),
+    max_ranked: num('f-maxranked', 4, 1, 8)
   };
+  $('preview').value = JSON.stringify(cfg, null, 2);
+  return cfg;
+}
+function fill(cfg){
+  $('f-direct').value = cfg.direct_url || 'https://zavbet.online/';
+  $('f-sub').value = cfg.sub_url || '';
+  $('f-timeout').value = cfg.connect_timeout_sec || 6;
+  $('f-maxranked').value = cfg.max_ranked || 4;
+  keys = (cfg.priority || []).slice();
+  allow = (cfg.allow || []).slice();
+  ban = (cfg.ban || []).slice();
+  renderKeys();
+  renderChips('allow', allow, true);
+  renderChips('ban', ban, false);
+  $('preview').value = JSON.stringify(cfg, null, 2);
 }
 function validate(cfg){
-  const errs=[];
-  if(cfg.app!=='mostsport-gate') errs.push('нет маркера app');
-  if(!/^https?:\/\//.test(cfg.direct_url)) errs.push('direct_url не похож на ссылку');
-  if(cfg.sub_url && !/^https?:\/\//.test(cfg.sub_url)) errs.push('sub_url не похож на ссылку');
-  cfg.priority.forEach((u,i)=>{
-    if(!/^vless:\/\/[^@]+@[^:]+:\d{2,5}/.test(u)) errs.push('строка '+(i+1)+' в приоритетных не похожа на vless://uuid@host:port');
+  const errs = [];
+  if (!/^https?:\/\//.test(cfg.direct_url)) errs.push('адрес сайта не похож на ссылку');
+  if (cfg.sub_url && !/^https?:\/\//.test(cfg.sub_url)) errs.push('ссылка подписки не похожа на ссылку');
+  cfg.priority.forEach((u, i) => {
+    if (!/^vless:\/\/[^@]+@[^:]+:\d{2,5}/.test(u)) errs.push('ключ ' + (i + 1) + ' не похож на vless://');
   });
-  if(!cfg.allow.length) errs.push('allow пуст — из подписки не пройдёт ни один сервер');
-  try{ JSON.parse(JSON.stringify(cfg)); }catch(e){ errs.push('JSON не собирается: '+e.message); }
+  if (!cfg.allow.length) errs.push('список разрешённых стран пуст');
   return errs;
 }
 
-/* ---------- actions ---------- */
-$('b-load').onclick = async ()=>{
+$('b-add').onclick = () => {
+  const v = $('key-new').value.trim();
+  if (!/^vless:\/\//.test(v)) { log('Нужна строка vless://', 'err'); return; }
+  keys.push(v);
+  $('key-new').value = '';
+  renderKeys();
+  log('Ключ добавлен: ' + keyName(v), 'ok');
+};
+$('b-load').onclick = async () => {
   saveConn();
-  try{
-    const data = await api(repoBase()+'?ref='+encodeURIComponent($('r-branch').value.trim())+'&ts='+Date.now());
+  if (!$('r-token').value.trim()) { log('Сначала вставь токен GitHub', 'err'); return; }
+  try {
+    const data = await api(repoBase() + '?ref=' + encodeURIComponent($('r-branch').value.trim()) + '&ts=' + Date.now());
     fileSha = data.sha;
     const cfg = JSON.parse(b64d(data.content));
-    if(cfg.app!=='mostsport-gate') throw new Error('файл не похож на конфиг mostsport (нет app:"mostsport-gate")');
-    loadedVersion = cfg.version||0;
-    fillForm(cfg);
-    $('preview').value = JSON.stringify(cfg,null,2);
-    $('meta').textContent = 'Загружено: v'+loadedVersion+' · sha '+fileSha.slice(0,7)+' · '+new Date((cfg.updated_at||0)*1000).toLocaleString();
-    log('Конфиг загружен: v'+loadedVersion+', приоритетных ключей: '+(cfg.priority||[]).length, 'ok');
-  }catch(e){ log('Ошибка загрузки: '+e.message,'err'); }
+    if (cfg.app !== 'mostsport-gate') throw new Error('это не конфиг Mostsport');
+    loadedVersion = cfg.version || 0;
+    fill(cfg);
+    $('meta').textContent = 'v' + loadedVersion + ' · ' + new Date((cfg.updated_at || 0) * 1000).toLocaleString();
+    log('Загружено с GitHub: v' + loadedVersion + ', ключей ' + keys.length, 'ok');
+  } catch (e) { log('Не загрузилось: ' + e.message, 'err'); }
 };
-
-$('b-new').onclick = ()=>{
-  fillForm({version:1, ttl_hours:6, direct_url:'https://zavbet.online/',
-    sub_url:'https://alius-sub.com/sub/ohDGE67bZuatW8sZ', connect_timeout_sec:10, max_ranked:3,
-    priority:[TM_KEY],
-    allow:['🇵🇱','🇱🇹','🇪🇪','🇷🇺','Варшава','Вильнюс','Москва'],
-    ban:['🇳🇱','🇺🇸','🇦🇹','🇩🇪','🇸🇪','Амстердам','Нью-Йорк','Вена','Франкфурт','Gaming','Китая']});
-  loadedVersion = 0; fileSha = null;
-  $('meta').textContent = 'Новый конфиг (ещё не сохранён)';
-  log('Форма заполнена значениями по умолчанию (с туркменским ключом)','ok');
-};
-
-$('b-build').onclick = ()=>{
-  const cfg = buildJson();
-  const errs = validate(cfg);
-  $('preview').value = JSON.stringify(cfg,null,2);
-  if(errs.length) log('Проверка: '+errs.join('; '),'err');
-  else log('JSON собран: v'+cfg.version+', приоритетных: '+cfg.priority.length+', allow: '+cfg.allow.length+', ban: '+cfg.ban.length,'ok');
-};
-
-$('b-save').onclick = async ()=>{
+$('b-save').onclick = async () => {
   saveConn();
+  if (!$('r-token').value.trim()) { log('Сначала вставь токен GitHub', 'err'); return; }
   const cfg = buildJson();
   const errs = validate(cfg);
-  $('preview').value = JSON.stringify(cfg,null,2);
-  if(errs.length){ log('Сохранение отменено: '+errs.join('; '),'err'); return; }
-  try{
+  if (errs.length) { log(errs.join('; '), 'err'); return; }
+  try {
     let sha = fileSha;
-    if(!sha){
-      const cur = await api(repoBase()+'?ref='+encodeURIComponent($('r-branch').value.trim())).catch(()=>null);
+    if (!sha) {
+      const cur = await api(repoBase() + '?ref=' + encodeURIComponent($('r-branch').value.trim())).catch(() => null);
       sha = cur ? cur.sha : null;
     }
-    const body = {message:'config: v'+cfg.version+' (админ-панель)', branch:$('r-branch').value.trim(), content:b64e(JSON.stringify(cfg,null,2))};
-    if(sha) body.sha = sha;
-    const res = await api(repoBase(), {method:'PUT', body});
+    const body = {message: 'config: v' + cfg.version, branch: $('r-branch').value.trim(), content: b64e(JSON.stringify(cfg, null, 2))};
+    if (sha) body.sha = sha;
+    const res = await api(repoBase(), {method: 'PUT', body});
     fileSha = res.content.sha;
     loadedVersion = cfg.version;
-    $('meta').textContent = 'Сохранено: v'+cfg.version+' · commit '+(res.commit.sha||'').slice(0,7);
-    log('Сохранено на GitHub: v'+cfg.version+', commit '+(res.commit.sha||'').slice(0,7),'ok');
-    log('raw.github обновляется сразу; jsDelivr может держать старую копию до 12 ч — приложение берёт максимальную версию из зеркал.','dim');
-  }catch(e){ log('Ошибка сохранения: '+e.message,'err'); }
+    $('meta').textContent = 'опубликовано v' + cfg.version;
+    log('Опубликовано v' + cfg.version + '. Телефоны возьмут это без нового APK: после следующего успешного входа, со следующего запуска.', 'ok');
+  } catch (e) { log('Не сохранилось: ' + e.message, 'err'); }
 };
-
-$('b-copy').onclick = ()=>{ $('preview').select(); document.execCommand('copy'); log('JSON скопирован в буфер','ok'); };
-$('b-dl').onclick = ()=>{
-  const blob = new Blob([$('preview').value],{type:'application/json'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob); a.download = 'gate-config.json'; a.click();
-  URL.revokeObjectURL(a.href);
-};
-
-$('b-checksub').onclick = async ()=>{
+$('b-copy').onclick = () => { $('preview').select(); document.execCommand('copy'); log('JSON скопирован', 'ok'); };
+$('b-checksub').onclick = async () => {
   const url = $('f-sub').value.trim();
   const out = $('subout');
-  if(!url){ out.innerHTML=''; log('sub_url пуст','warn'); return; }
-  out.innerHTML = '<div class="hint">Загружаю подписку…</div>';
-  let text;
-  try{
-    const r = await fetch(url, {headers:{'User-Agent':'v2rayNG/1.8.29'}});
-    text = await r.text();
-  }catch(e){
-    out.innerHTML = '<div class="hint warn">Браузеру подписка не отдалась (CORS или сеть). Вставь ответ подписки сюда:</div>'+
-      '<textarea id="sub-manual" style="min-height:120px"></textarea><button id="sub-parse" class="ghost">Разобрать вставленное</button><div id="sub-report"></div>';
-    $('sub-parse').onclick = ()=>reportSub($('sub-manual').value);
-    log('Прямая загрузка подписки не удалась ('+e.message+') — используй ручную вставку','warn');
-    return;
+  if (!url) { log('Ссылка подписки пустая', 'err'); return; }
+  out.innerHTML = '<div class="hint">Загружаю…</div>';
+  try {
+    const r = await fetch(url, {headers: {'User-Agent': 'v2rayNG/1.8.29'}});
+    reportSub(await r.text());
+  } catch (e) {
+    out.innerHTML = '<div class="hint">Браузер не смог открыть подписку. Вставь ответ сюда:</div><textarea id="sub-manual" style="width:100%;min-height:100px;margin-top:6px;background:#0e1116;color:#e8edf5;border:1px solid #2a3140;border-radius:8px;padding:8px"></textarea><button class="ghost" id="sub-parse" type="button">Разобрать</button><div id="sub-report"></div>';
+    $('sub-parse').onclick = () => reportSub($('sub-manual').value);
   }
-  reportSub(text);
 };
 function reportSub(text){
   const out = $('sub-report') || $('subout');
-  try{
+  try {
     const arr = JSON.parse(text.trim());
-    const allow = $('f-allow').value.split('\n').map(s=>s.trim()).filter(Boolean);
-    const ban = $('f-ban').value.split('\n').map(s=>s.trim()).filter(Boolean);
-    let good=0, bad=0, skip=0;
-    const chips=[];
-    arr.forEach(cfg=>{
-      const r = cfg.remarks||'(без имени)';
-      const banned = ban.some(n=>r.includes(n));
-      const allowed = allow.some(n=>r.includes(n));
-      if(banned){bad++; chips.push('<span class="chip bad">'+esc(r)+' — бан</span>');}
-      else if(allowed){good++; chips.push('<span class="chip good">'+esc(r)+' — пройдёт</span>');}
-      else {skip++; chips.push('<span class="chip skip">'+esc(r)+' — мимо allow</span>');}
+    let good = 0, bad = 0, skip = 0;
+    const chips = [];
+    arr.forEach(cfg => {
+      const r = cfg.remarks || '(без имени)';
+      const banned = ban.some(n => r.includes(n));
+      const allowed = allow.some(n => r.includes(n));
+      if (banned) { bad++; chips.push('<span class="chip off">' + esc(r) + '</span>'); }
+      else if (allowed) { good++; chips.push('<span class="chip on">' + esc(r) + '</span>'); }
+      else { skip++; chips.push('<span class="chip">' + esc(r) + '</span>'); }
     });
-    out.innerHTML = '<div>Подписка: '+arr.length+' записей · пройдёт фильтр: <b class="ok">'+good+'</b> · бан: <b class="err">'+bad+'</b> · мимо allow: <b class="dim">'+skip+'</b></div>'+
-      '<div style="margin-top:6px">'+chips.join('')+'</div>';
-    log('Подписка разобрана: всего '+arr.length+', подходит '+good,'ok');
-  }catch(e){
-    out.innerHTML = '<div class="err">Не удалось разобрать подписку как JSON: '+esc(e.message)+'</div>';
-    log('Подписка не разобралась: '+e.message,'err');
+    out.innerHTML = '<div>Всего ' + arr.length + ' · пройдут <b class="ok">' + good + '</b> · запрещены <b class="err">' + bad + '</b> · не в списке <b class="dim">' + skip + '</b></div><div class="chips" style="margin-top:8px">' + chips.join('') + '</div>';
+    log('Подписка: подходит ' + good + ' из ' + arr.length, 'ok');
+  } catch (e) {
+    out.innerHTML = '<div class="err">Это не JSON подписки</div>';
   }
 }
-function esc(s){ const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
-
-$('b-history').onclick = async ()=>{
+$('b-history').onclick = async () => {
   saveConn();
-  try{
-    const commits = await api('/repos/'+$('r-owner').value.trim()+'/'+$('r-repo').value.trim()+
-      '/commits?path='+encodeURIComponent($('r-path').value.trim())+'&per_page=15');
+  if (!$('r-token').value.trim()) { log('Сначала вставь токен GitHub', 'err'); return; }
+  try {
+    const commits = await api('/repos/' + $('r-owner').value.trim() + '/' + $('r-repo').value.trim() + '/commits?path=' + encodeURIComponent($('r-path').value.trim()) + '&per_page=15');
     historyData = commits;
-    if(!commits.length){ $('history').innerHTML='<div class="hint">Коммитов по этому файлу ещё нет.</div>'; return; }
-    const rows = commits.map((c,i)=>'<tr><td class="mono">'+c.sha.slice(0,7)+'</td><td>'+
-      new Date(c.commit.author.date).toLocaleString()+'</td><td>'+esc(c.commit.message)+
-      '</td><td><button class="ghost" data-i="'+i+'">Откатить в форму</button></td></tr>').join('');
-    $('history').innerHTML = '<table><tr><th>commit</th><th>дата</th><th>сообщение</th><th></th></tr>'+rows+'</table>';
-    $('history').querySelectorAll('button[data-i]').forEach(b=>{
-      b.onclick = async ()=>{
+    if (!commits.length) { $('history').innerHTML = '<div class="hint">Пока пусто.</div>'; return; }
+    $('history').innerHTML = '<table><tr><th>коммит</th><th>когда</th><th>что</th><th></th></tr>' + commits.map((c, i) =>
+      '<tr><td>' + c.sha.slice(0, 7) + '</td><td>' + new Date(c.commit.author.date).toLocaleString() + '</td><td>' + esc(c.commit.message) +
+      '</td><td><button class="ghost" data-i="' + i + '" type="button">Вернуть в форму</button></td></tr>').join('') + '</table>';
+    $('history').querySelectorAll('button[data-i]').forEach(b => {
+      b.onclick = async () => {
         const c = historyData[+b.dataset.i];
-        try{
-          const data = await api(repoBase()+'?ref='+c.sha);
-          const cfg = JSON.parse(b64d(data.content));
-          // version must jump past HEAD so stale CDN mirrors can't outvote the rollback
-          loadedVersion = 0;
-          const head = await api(repoBase()+'?ref='+encodeURIComponent($('r-branch').value.trim())).catch(()=>null);
-          if (head) { try { loadedVersion = JSON.parse(b64d(head.content)).version || 0; } catch(e){} }
-          fillForm(cfg);
-          $('f-nobump').checked = false;
-          log('Коммит '+c.sha.slice(0,7)+' загружен в форму — проверь и нажми «Сохранить на GitHub»','ok');
-          window.scrollTo({top:0,behavior:'smooth'});
-        }catch(e){ log('Не удалось прочитать коммит: '+e.message,'err'); }
+        const data = await api(repoBase() + '?ref=' + c.sha);
+        const cfg = JSON.parse(b64d(data.content));
+        loadedVersion = 0;
+        const head = await api(repoBase() + '?ref=' + encodeURIComponent($('r-branch').value.trim())).catch(() => null);
+        if (head) { try { loadedVersion = JSON.parse(b64d(head.content)).version || 0; } catch (e) {} }
+        fill(cfg);
+        log('Старый конфиг в форме. Нажми «Опубликовать», чтобы он ушёл на телефоны.', 'ok');
       };
     });
-    log('История: '+commits.length+' коммитов','ok');
-  }catch(e){ log('Ошибка истории: '+e.message,'err'); }
+  } catch (e) { log(e.message, 'err'); }
 };
+$('b-out').onclick = () => { sessionStorage.removeItem('ms_ok'); location.reload(); };
 
-loadConn();
-log('Панель готова. Вставь токен и нажми «Загрузить конфиг».','dim');
+function showApp(){
+  $('login').hidden = true;
+  $('app').hidden = false;
+  loadConn();
+  renderKeys();
+  renderChips('allow', allow, true);
+  renderChips('ban', ban, false);
+  bindAdd('allow-new', allow, 'allow', true);
+  bindAdd('ban-new', ban, 'ban', false);
+  if (!$('r-token').value) log('Войди токеном GitHub и нажми «Обновить с GitHub».', 'dim');
+  else $('b-load').click();
+}
+$('login-form').onsubmit = e => {
+  e.preventDefault();
+  if ($('pw').value === PASS) {
+    sessionStorage.setItem('ms_ok', '1');
+    showApp();
+  } else $('pw-err').textContent = 'Неверный пароль';
+};
+if (sessionStorage.getItem('ms_ok') === '1') showApp();
+
+const hiddenVersion = document.createElement('input');
+hiddenVersion.id = 'f-version';
+hiddenVersion.type = 'hidden';
+hiddenVersion.value = '1';
+document.body.appendChild(hiddenVersion);
 </script>
 </body>
 </html>
